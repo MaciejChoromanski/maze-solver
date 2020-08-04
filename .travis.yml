@@ -6,4 +6,4 @@ python:
 before_script: pip install -r requirements.txt
 
 script:
-    - flake8 && python -m unittest discover"
+    - flake8 && python -m unittest discover

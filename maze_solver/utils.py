@@ -108,6 +108,9 @@ class Maze:
     def save_solution(self, extension: str = 'png') -> None:
         """Saves the solution of the maze as an image file"""
 
+        if not self._solved:
+            raise ValueError('The maze is not solved yet.')
+
         Path('maze_solutions').mkdir(parents=True, exist_ok=True)
         self._image.save(f'maze_solutions/{self.name}.{extension}')
 
