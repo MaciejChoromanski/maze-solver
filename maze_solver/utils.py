@@ -67,7 +67,7 @@ class Maze:
         """Returns the coordinates of the entrance"""
 
         if not self._exit:
-            exit_position = (self.size[0]-1, self.size[1]-1)
+            exit_position = (self.size[0] - 1, self.size[1] - 1)
             if self._get_pixel_color(*exit_position) != 'grey':
                 message = f'The exit must be located at {self._size}'
                 raise ValueError(message)
@@ -121,14 +121,14 @@ class Maze:
             (0, 0, 0): 'black',
             (128, 128, 128): 'grey',
             (255, 255, 255): 'white',
-            (255, 0, 0): 'red'
+            (255, 0, 0): 'red',
         }
         color = self._image_loaded[x, y][:-1]
 
         return colors[color]
 
     def _get_next_step(
-            self, current_position: Position, current_direction: str = None
+        self, current_position: Position, current_direction: str = None
     ) -> Tuple[Tuple[int, int], str]:
         """Makes a move based on position and direction"""
 

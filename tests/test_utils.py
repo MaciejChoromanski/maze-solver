@@ -67,7 +67,7 @@ class TestMaze(TestCase):
         ValueError when conditions are met
         """
 
-        x, y = self.maze.size[0]-1, self.maze.size[1]-1
+        x, y = self.maze.size[0] - 1, self.maze.size[1] - 1
         self.maze._image_loaded[x, y] = (0, 0, 0, 255)
 
         with self.assertRaises(ValueError):
@@ -79,7 +79,7 @@ class TestMaze(TestCase):
         """
 
         exit_ = self.maze.exit
-        expected_result = (self.maze.size[0]-1, self.maze.size[1]-1)
+        expected_result = (self.maze.size[0] - 1, self.maze.size[1] - 1)
 
         self.assertEqual(exit_, expected_result)
 
