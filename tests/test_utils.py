@@ -1,10 +1,91 @@
+import sys
 from pathlib import Path
 from unittest import TestCase
 from unittest.mock import Mock, patch
 
 from PIL.Image import Image
 
-from maze_solver.utils import Maze, Position
+from maze_solver.utils import (
+    Maze,
+    Position,
+    get_input_data,
+    solve_maze_from_file,
+    solve_test_mazes,
+    display_help,
+)
+
+
+class TestClasslessFunctions(TestCase):
+    """Tests classless functions"""
+
+    @patch.object(sys, 'argv', ['maze_solver', '-a'])
+    @patch('builtins.print')
+    def test_get_input_data_raises_error(self, mock_print) -> None:
+        """Tests if get_input_data raises an error when conditions are met"""
+
+        with self.assertRaises(SystemExit):
+            get_input_data()
+
+    @patch.object(sys, 'argv', ['maze_solver', '-f', '/path/to/file'])
+    def test_get_input_data_successful(self) -> None:
+        """Tests if get_input_data returns proper data"""
+
+        mode, value = get_input_data()
+
+        self.assertEqual(mode, 'file')
+        self.assertEqual(value, '/path/to/file')
+
+    @patch.object(sys, 'argv', ['maze_solver'])
+    def test_get_input_data_no_argument_provided(self) -> None:
+        """Tests if get_input_data returns proper data"""
+
+        mode, value = get_input_data()
+
+        self.assertEqual(mode, 'test')
+        self.assertIsNone(value)
+
+    @patch.object(Maze, 'solve')
+    @patch.object(Maze, 'draw_path')
+    @patch.object(Maze, 'show')
+    @patch.object(Maze, 'save_solution')
+    @patch('builtins.print')
+    @patch('builtins.input')
+    def test_successful_solving_maze_from_file(
+            self, mock_input, mock_print, mock_save_solution,
+            mock_show, mock_draw_path, mock_solve
+    ) -> None:
+        """Tests if solve_maze_from_file works properly"""
+
+        mock_input.side_effect = ['y', 'n']
+        solve_maze_from_file('test_mazes/maze_01.png')
+
+        mock_solve.assert_called()
+        mock_draw_path.assert_called()
+        mock_show.assert_called()
+        mock_save_solution.assert_not_called()
+
+    @patch.object(Maze, 'solve')
+    @patch.object(Maze, 'draw_path')
+    @patch.object(Maze, 'save_solution')
+    @patch('builtins.print')
+    def test_successful_solving_test_mazes(
+            self, mock_print, mock_save_solution, mock_draw_path, mock_solve
+    ) -> None:
+        """Tests if solve_maze_from_file works properly"""
+
+        solve_test_mazes()
+
+        self.assertEqual(mock_solve.call_count, 4)
+        self.assertEqual(mock_draw_path.call_count, 4)
+        self.assertEqual(mock_save_solution.call_count, 4)
+
+    @patch('builtins.print')
+    def test_display_help(self, mock_print) -> None:
+        """Tests if help is displayed properly"""
+
+        display_help()
+
+        mock_print.assert_called()
 
 
 class TestMaze(TestCase):
