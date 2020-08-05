@@ -1,10 +1,112 @@
 from __future__ import annotations
 
+import getopt
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Tuple, List, Union
 
 from PIL import Image, ImageFile
+
+
+def get_input_data() -> Tuple[str, Union[str, None]]:
+    """Returns the data with which the script should was run"""
+
+    short_options = "hf:t"
+    long_options = ["help", "file=", 'test']
+    cmd_arguments = sys.argv
+    argument_list = cmd_arguments[1:] or ['-t']
+
+    try:
+        arguments, values = getopt.getopt(
+            argument_list, short_options, long_options
+        )
+    except getopt.error as err:
+        print(str(err))
+        sys.exit(2)
+
+    for argument, value in arguments:
+        if argument in ("-f", "--file"):
+            return 'file', value
+        elif argument in ("-h", "--help"):
+            return 'help', None
+        else:
+            return 'test', None
+
+
+def solve_maze_from_file(path: str) -> None:
+    """Reads, solves and saves the solution of the custom maze"""
+
+    def check_response(message: str) -> bool:
+        """Returns whether user agrees to proceed or not"""
+
+        response = input(message)
+
+        return response.upper() == 'Y'
+
+    maze = Maze(path)
+    print(f'The maze \'{maze.name}\' has been loaded!')
+    print('Solving the maze...')
+    maze.solve()
+    print('The maze has been solved!')
+    print('Drawing path...')
+    maze.draw_path()
+    print('The path has been drawn!')
+
+    if check_response('Would you like to see the solution? y/n default: n\n'):
+        maze.show()
+
+    if check_response('Would you like to save the solution? y/n default: n\n'):
+        print('Saving solution...')
+        maze.save_solution()
+        print('The solution has been saved in \'solutions\' directory!')
+
+
+def solve_test_mazes() -> None:
+    """Reads, solves and saves the solution of the test mazes"""
+
+    for i in range(1, 5):
+        maze = Maze(f'test_mazes/maze_0{i}.png')
+        print(f'The maze \'{maze.name}\' has been loaded!')
+        print('Solving the maze...')
+        maze.solve()
+        print('The maze has been solved!')
+        print('Drawing path...')
+        maze.draw_path()
+        print('The path has been drawn!')
+        print('Saving solution...')
+        maze.save_solution()
+        print('The solution has been saved in \'solutions\' directory!')
+
+
+def display_help() -> None:
+    """Displays the help text"""
+
+    print(
+        """
+    This script solves mazes from images. The method used to determine where
+    the exit is relies on always sticking with the right wall of the maze. The
+    width and the height of the image doesn't matter. However, the image must
+    contain only 3 colors:
+        1. Grey - this one represents entrance and exit of the maze,
+        2. Black - this one represents the walls of the maze,
+        3. White - this one represents the walking space of the maze.
+
+    Additional info:
+        1. The entrance of the maze must be located at (0, 0) pixel.
+        2. The exit of the maze must be located at (<max_width>, <max_height>)
+           pixel.
+
+    Options:
+        -t --test - default option, solves mazes from 'test_mazes' directory,
+        -f --file - enables solving custom maze if the path to it is provided,
+        -h --help - displays the help text.
+    """
+    )
+
+
+def _solve_the_maze(maze: Maze) -> None:
+    """Runs the necessary operations to solve the maze"""
 
 
 class Maze:
