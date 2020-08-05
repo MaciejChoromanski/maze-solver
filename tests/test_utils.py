@@ -51,8 +51,13 @@ class TestClasslessFunctions(TestCase):
     @patch('builtins.print')
     @patch('builtins.input')
     def test_successful_solving_maze_from_file(
-            self, mock_input, mock_print, mock_save_solution,
-            mock_show, mock_draw_path, mock_solve
+        self,
+        mock_input,
+        mock_print,
+        mock_save_solution,
+        mock_show,
+        mock_draw_path,
+        mock_solve,
     ) -> None:
         """Tests if solve_maze_from_file works properly"""
 
@@ -69,7 +74,7 @@ class TestClasslessFunctions(TestCase):
     @patch.object(Maze, 'save_solution')
     @patch('builtins.print')
     def test_successful_solving_test_mazes(
-            self, mock_print, mock_save_solution, mock_draw_path, mock_solve
+        self, mock_print, mock_save_solution, mock_draw_path, mock_solve
     ) -> None:
         """Tests if solve_maze_from_file works properly"""
 

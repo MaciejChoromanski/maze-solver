@@ -82,25 +82,27 @@ def solve_test_mazes() -> None:
 def display_help() -> None:
     """Displays the help text"""
 
-    print("""
+    print(
+        """
     This script solves mazes from images. The method used to determine where
-    the exit is relies on always sticking with the right wall of the maze. The 
-    width and the height of the image doesn't matter. However, the image must 
-    contain only 3 colors: 
-        1. Grey - this one represents entrance and exit of the maze, 
+    the exit is relies on always sticking with the right wall of the maze. The
+    width and the height of the image doesn't matter. However, the image must
+    contain only 3 colors:
+        1. Grey - this one represents entrance and exit of the maze,
         2. Black - this one represents the walls of the maze,
         3. White - this one represents the walking space of the maze.
-        
-    Additional info: 
+
+    Additional info:
         1. The entrance of the maze must be located at (0, 0) pixel.
-        2. The exit of the maze must be located at (<max_width>, <max_height>) 
+        2. The exit of the maze must be located at (<max_width>, <max_height>)
            pixel.
-        
+
     Options:
         -t --test - default option, solves mazes from 'test_mazes' directory,
         -f --file - enables solving custom maze if the path to it is provided,
         -h --help - displays the help text.
-    """)
+    """
+    )
 
 
 def _solve_the_maze(maze: Maze) -> None:
